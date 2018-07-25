@@ -6,7 +6,7 @@
 //  It performs a quick and efficient multiple file uploads.
 //
 //  IMPORTANT:  To use, first you must recompile with your local values
-//              for OUTDIR and LOGDIR (see below).
+//              for PATH_UPLOAD_DIR and LOGDIR (see below).
 //
 
 //----------------------------------------------------------------------
@@ -37,16 +37,24 @@
 //----------------------------------------------------------------------
 
 
-// #define OUTDIR  "/export/www/sites/signtyp/WorkArea/Upload/files"
-// #define LOGFILE "/export/www/sites/signtyp/WorkArea/Upload/log/upload.log"
+/*
+#ifndef PATH_UPLOAD_DIR
+#error  To compile cgiupload.c, you must define PATH_UPLOAD_DIR in the Makefile
+#endif
 
-#define OUTDIR  "/home/jar02014/dev/c/cgiupload/test"
-#define LOGFILE "/home/jar02014/dev/c/cgiupload/test/upload.log"
+#ifndef PATH_LOG_FILE
+#error  To compile cgiupload.c, you must define PATH_LOG_FILE in the Makefile
+#endif
+*/
+// #define PATH_UPLOAD_DIR /export/www/sites/signtyp/WorkArea/Upload/files
+// #define PATH_LOG_FILE   /export/www/sites/signtyp/WorkArea/Upload/log/upload.log
+
 
 #define BUFFLEN  0x400000  //  4MB input buffer
 #define BARRLEN  256       //  Maximum length of barrier string, which signals start of a file
 #define LINELEN  256       //  Maximum length of one header line, and filename
 #define PATHLEN  1024      //  Maximum length of file path
+
 
 
 //----------------------------------------------------------------------
@@ -196,7 +204,7 @@ size_t transfer_buffered_stdin(char *buf, int *cur, int *end, int bufsize, char 
 			fout = NULL;
 		} else  {
 			fout = fopen(str,"w");
-			if (! fout) msg_and_exit("ERROR:  Cannot open file %s/%s for writing: %s", OUTDIR, str, strerror(errno) ); 
+			if (! fout) msg_and_exit("ERROR:  Cannot open file %s/%s for writing: %s", PATH_UPLOAD_DIR, str, strerror(errno) ); 
 		}
 	//  Initialize string
 	} else {
@@ -280,7 +288,7 @@ size_t transfer_buffered_stdin(char *buf, int *cur, int *end, int bufsize, char 
 void write_log(char *msg) {
 
 	//  Open log
-	FILE *fout = fopen(LOGFILE,"a");
+	FILE *fout = fopen(PATH_LOG_FILE,"a");
 
 	//  Write time stamp
 	char *t = get_timestamp("%Y-%m-%d %H:%M:%S ");
@@ -319,7 +327,7 @@ int main(int argc, char *argv[]) {
 	if (!getcwd(curdir, PATHLEN)) msg_and_exit("ERROR:  Cannot get value of starting directory");
 
 	//  Change to output directory
-	if (chdir(OUTDIR)) msg_and_exit("ERROR:  Cannot change to directory %s.", OUTDIR);
+	if (chdir(PATH_UPLOAD_DIR)) msg_and_exit("ERROR:  Cannot change to directory %s.", PATH_UPLOAD_DIR);
 
 	//  First line from stdin, this is the 'barrier' string
 	fgets(barrier, BARRLEN, stdin);
@@ -378,7 +386,7 @@ int main(int argc, char *argv[]) {
 			snprintf(line, LINELEN, "uploaded file %s, %ld bytes, stored as %s/%s (upload took %ld seconds)",
 				filename,
 				nbytes,
-				OUTDIR,
+				PATH_UPLOAD_DIR,
 				new_filename,
 				time(NULL) - start_time
 			);
