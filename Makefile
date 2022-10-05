@@ -1,6 +1,6 @@
 #  Set location for file upload directory and log file
-#PATH_UPLOAD_DIR =  /export/www/sites/signtyp/WorkArea/Upload/files
-#PATH_LOG_FILE = /export/www/sites/signtyp/WorkArea/Upload/log/upload.log
+PATH_UPLOAD_DIR = test
+PATH_LOG_FILE = test.log
 
 #  Note that we place defined strings inside double-quotes - this is necessary for the C compiler to make sense of it
 cgiupload: cgiupload.c
@@ -9,5 +9,6 @@ cgiupload: cgiupload.c
 clean:
 	rm cgiupload
 
-test: cgiupload
+test:
+	mkdir -p test
 	./cgiupload < upload_raw
