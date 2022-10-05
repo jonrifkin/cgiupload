@@ -26,6 +26,9 @@ Content-Type: $FTYPE
 
 EOM
         cat $FNAME
+cat<<EOM
+
+EOM
 done
 
 
@@ -34,6 +37,5 @@ done
 #
 
 cat<<EOM
-
 $BOUNDARY--
 EOM

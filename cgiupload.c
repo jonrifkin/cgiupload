@@ -96,7 +96,6 @@ void print_special(char *s,int n) {
         printf("strlen(s): %ld\n", strlen(s));
         while (*c && n) {
                 // if (*c==10 || *c==13) printf("."); else printf("%c",*c);
-                printf("test: print_special: %02x %c\n",*c,*c);
                 n--;
                 c++;
         }
@@ -247,8 +246,6 @@ int str_append(char *str, int lstr, int strsize, char *ptr, int nchars) {
 //                 stdin is being written to the file name stored in str.
 size_t transfer_buffered_stdin(char *buf, int *cur, int *end, int bufsize, char *barrier, char *str, int strsize) {
 	if (!barrier) msg_and_exit("ERROR:  Barrier string is empty");
-WRITEVAR(barrier,%s)
-printf("test: transfer_buffered_stdin: strlen(barrier) (%ld)\n", strlen(barrier));
 	//  Lremain is the number of chars to leave at the end of the buffer,
 	//  because they may contain part of the barrier string.
 	int lremain = strlen(barrier) - 1;
@@ -292,7 +289,6 @@ printf("test: transfer_buffered_stdin: strlen(barrier) (%ld)\n", strlen(barrier)
 				} else {
 					if (fout) fwrite(buf,1,nremain,fout);
 					nbytes = nremain;
-                                        WRITEVAR(nbytes,%ld)
 				}
 				break;
 			}
@@ -301,14 +297,12 @@ printf("test: transfer_buffered_stdin: strlen(barrier) (%ld)\n", strlen(barrier)
 		char *pos = (char *) memmem( buf+*cur, *end-*cur, barrier, lremain+1);
 		//   Barrier string found - save chars and return
 		if (pos) {
-WRITETXT("Barrier found")
 			//  Store chars in string
 			if (strsize) {
 				//  When writing to string, include the barrier
 				int ncopy = pos - (buf+*cur) + lremain+1;
 				str_append(str, strlen(str), strsize, buf+*cur, ncopy);
 				nbytes += ncopy;
-WRITEVAR(nbytes,%ld)
 			//  Write char data to file
 			} else {
 				//  When writing to file, omit the barrier
@@ -316,12 +310,9 @@ WRITEVAR(nbytes,%ld)
 				//    and were added by the web client
 				if (fout) fwrite( buf+*cur, 1, pos-(buf+*cur)-2, fout );
 				nbytes += pos-(buf+*cur)-2;
-WRITEVAR(nbytes,%ld)
                                 //test
                                 {
-                                        WRITEVAR(pos,%p)
                                         char *c;
-                                        printf("test: (%c%c%c%c%c%c%c%c)\n", pos[1],pos[2],pos[3],pos[4],pos[5],pos[6],pos[7],pos[8]);
                                         for (c=pos-8;c<=pos;c++) printf(" %02x", (unsigned char) *c);
                                         printf("\n");
                                 }
@@ -337,12 +328,10 @@ WRITEVAR(nbytes,%ld)
 				int ncopy = *end - *cur - lremain;
 				str_append(str, strlen(str), strsize, buf, ncopy);
 				nbytes += ncopy;
-WRITEVAR(nbytes,%ld)
 			//  Write char data to file
 			} else {
 				if (fout) fwrite( buf+*cur, 1, *end-*cur-lremain, fout );
 				nbytes += BUFFLEN-lremain;
-WRITEVAR(nbytes,%ld)
 			}
 			//  Advance cursor to start of remaining characters
 			*cur = *end - lremain;
@@ -352,7 +341,6 @@ WRITEVAR(nbytes,%ld)
 	if (strsize==0 && fout) fclose(fout);
 
 	//  Return number of bytes read;
-WRITEVAR(nbytes,%ld)
 	return nbytes;
 }
 
