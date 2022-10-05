@@ -21,7 +21,7 @@ message back to browser confirming the upload.
 Note that when it writes the files to the upload directory, it
 changes their names to prevent them from overwriting previously
 existing files; it prepends the date and time to each file to make it
-unique.  So, the file `cat.jpg` may become `20221005-121249-cat.jpg'
+unique.  So, the file `cat.jpg` may become `20221005-121249-cat.jpg`
 (the prefix format is `YYYYmmdd-HHMMSS-`).
 
 
