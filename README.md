@@ -39,10 +39,10 @@ Makefile.  For example:
 Make sure that the upload directory and the log file are writeable by
 the webserver.
 
-NOTE: If you use relative path names for the above variables,
-then `PATH_UPLOAD_DIR` will be be relative to the directory where
-cgiupload is placed, and `PATH_LOG_FILE` will be relative to
-`PATH_UPLOAD_DIR`.
+NOTE: If you use relative path name for `PATH_UPLOAD_DIR`, the name will 
+be relative to the directorh where cgiupload is placed.  If you use a
+relative path name for `PATH_LOG_FILE`, that name will be relative to 
+the directory `PATH_UPLOAD_DIR`.
        
 2. To compile, simply run
 ```
